@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.service.MailService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import com.example.demo.repo.TokenRepo;
 import com.example.demo.service.UserService;
 import com.example.demo.model.AppUser;
 
+import javax.mail.MessagingException;
 import java.security.Principal;
 import java.util.Collection;
 
@@ -20,11 +22,17 @@ public class UserController {
     private UserService userService;
     private AppUserRepo appUserRepo;
     private TokenRepo tokenRepo;
+    private MailService mailService;
 
     public UserController(UserService userService, AppUserRepo appUserRepo, TokenRepo tokenRepo) {
         this.userService = userService;
         this.appUserRepo = appUserRepo;
         this.tokenRepo = tokenRepo;
+    }
+
+    @RequestMapping("/")
+    public String startowa() {
+        return "home";
     }
 
     @GetMapping("/hello")
@@ -56,5 +64,37 @@ public class UserController {
         appUser.setEnabled(true);
         appUserRepo.save(appUser);
         return "hello";
+    }
+
+    @RequestMapping("/wszyscy")
+    public String wszyscy() {
+        return "wszyscy";
+    }
+
+    @RequestMapping("/ForAdmin")
+    public String foradmin() {
+        return "ForAdmin";
+    }
+
+    @RequestMapping("/ForUSer")
+    public String foruser() {
+        return "ForUSer";
+    }
+
+    @RequestMapping("/send")
+    public String sendForm() {
+        return "send";
+    }
+
+    @RequestMapping("/wyslij")
+    public String send(@RequestParam("to") String to, @RequestParam("subject")
+            String subject, @RequestParam("text") String text)
+    {
+        try {
+            mailService.sendMail(to, subject, text, false);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return "send";
     }
 }

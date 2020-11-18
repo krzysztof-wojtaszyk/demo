@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().disable();
         http.authorizeRequests()
                 .antMatchers("/hello").authenticated()
+                .antMatchers("/wszyscy").permitAll()
+                .antMatchers("/ForAdmin").hasRole("ADMIN")
+                .antMatchers("/ForUSer").hasRole("USER")
+                .antMatchers("/console").hasRole("ADMIN")
+                .antMatchers("/wyslij").authenticated()
                 .and()
                 .formLogin().defaultSuccessUrl("/hello");
     }
