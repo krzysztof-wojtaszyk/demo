@@ -45,7 +45,7 @@ public class UserService {
         String url = "http://localhost:8080/token?value=" + tokenValue;
 
         try {
-            mailService.sendMail(appUser.getUsername(), "Potwierdzaj to!", url, false);
+            mailService.sendMail(appUser.getUsername(), "Mail Potwierdzający", url, false);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
